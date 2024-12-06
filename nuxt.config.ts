@@ -8,10 +8,10 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     logto: {
-      endpoint: '<你的-logto-endpoint>',
-      appId: '<你的-logto-app-id>',
-      appSecret: '<你的-logto-app-secret>',
-      cookieEncryptionKey: '<一个随机字符串>',
+      endpoint: '',
+      appId: '',
+      appSecret: '',
+      cookieEncryptionKey: '',
     },
   },
   eslint: {
@@ -21,5 +21,12 @@ export default defineNuxtConfig({
   },
   unocss: {
     nuxtLayers: true,
+  },
+  logto: {
+    pathnames: {
+      signIn: '/login',
+      signOut: '/logout',
+      callback: '/auth/callback',
+    },
   },
 })
