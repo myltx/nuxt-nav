@@ -1,122 +1,25 @@
 export default defineNuxtConfig({
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   modules: [
-    "@nuxt/eslint",
-    [
-      "@nuxtjs/stylelint-module",
-      {
-        // 颜色指定大写
-    'no-undef': 2,
-    // 禁止空块
-    'no-empty-function': 2,
-    // 颜色6位长度
-    'no-mixed-spaces-and-tabs': 2,
-    // 兼容自定义标签名
-    'vue/valid-v-for': 0,
-    // 忽略伪类选择器 ::v-deep
-    'vue/custom-event-name-casing': 0,
-    // 禁止低优先级的选择器出现在高优先级的选择器之后。
-    'vue/no-deprecated-slot-attribute': 0,
-    // 不验证@未知的名字，为了兼容scss的函数
-    'vue/no-deprecated-slot-scope-attribute': 0,
-    // 禁止空注释
-    'no-multi-spaces': 2,
-    // 禁止简写属性的冗余值
-    'no-unused-vars': 2,
-    // 禁止值的浏览器引擎前缀
-    'no-unused-expressions': 2,
-    // property-no-vendor-prefix
-    'property-no-vendor-prefix': 2,
-    // 禁止小于 1 的小数有一个前导零
-    'no-zero-prefix': 2,
-    // 禁止空第一行
-    'no-empty-first-line': 2,
-    // 属性的排序
-    'order/properties-order': [
-      'position',
-      'top',
-      'right',
-      'bottom',
-      'left',
-      'z-index',
-      'display',
-      'justify-content',
-      'align-items',
-      'float',
-      'clear',
-      'overflow',
-      'overflow-x',
-      'overflow-y',
-      'margin',
-      'margin-top',
-      'margin-right',
-      'margin-bottom',
-      'margin-left',
-      'border',
-      'border-style',
-      'border-width',
-      'border-color',
-      'border-top',
-      'border-top-style',
-      'border-top-width',
-      'border-top-color',
-      'border-right',
-      'border-right-style',
-      'border-right-width',
-      'border-right-color',
-      'border-bottom',
-      'border-bottom-style',
-      'border-bottom-width',
-      'border-bottom-color',
-      'border-left',
-      'border-left-style',
-      'border-left-width',
-      'border-left-color',
-      'border-radius',
-      'padding',
-      'padding-top',
-      'padding-right',
-      'padding-bottom',
-      'padding-left',
-      'width',
-      'min-width',
-      'max-width',
-      'height',
-      'min-height',
-      'max-height',
-      'font-size',
-      'font-family',
-      'font-weight',
-      'text-align',
-      'text-justify',
-      'text-indent',
-      'text-overflow',
-      'text-decoration',
-      'white-space',
-      'color',
-      'background',
-      'background-position',
-      'background-repeat',
-      'background-size',
-      'background-color',
-      'background-clip',
-      'opacity',
-      'filter',
-      'list-style',
-      'outline',
-      'visibility',
-      'box-shadow',
-      'text-shadow',
-      'resize',
-      'transition',
-    ],
-      },
-    ],
+    '@logto/nuxt',
+    '@nuxt/eslint',
+    '@unocss/nuxt',
   ],
+  runtimeConfig: {
+    logto: {
+      endpoint: '<你的-logto-endpoint>',
+      appId: '<你的-logto-app-id>',
+      appSecret: '<你的-logto-app-secret>',
+      cookieEncryptionKey: '<一个随机字符串>',
+    },
+  },
   eslint: {
     config: {
       stylistic: true,
     },
   },
-});
+  unocss: {
+    nuxtLayers: true,
+  },
+})
