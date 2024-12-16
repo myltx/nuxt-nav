@@ -1,18 +1,21 @@
 export default defineNuxtConfig({
+  ssr: false,
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  srcDir: 'app/',
+  plugins: ['~/plugins/logto.ts'],
   modules: [
-    '@logto/nuxt',
     '@nuxt/eslint',
     '@unocss/nuxt',
+    '@nuxtjs/supabase',
   ],
   runtimeConfig: {
-    logto: {
-      endpoint: '',
-      appId: '',
-      appSecret: '',
-      cookieEncryptionKey: '',
+    logtoAppId: process.env.NUXT_LOGTO_APP_ID,
+    logtoEndpoint: process.env.NUXT_LOGTO_ENDPOINT,
+    // 公开变量（客户端也可用）
+    public: {
+      logtoAppId: process.env.NUXT_LOGTO_APP_ID,
+      logtoEndpoint: process.env.NUXT_LOGTO_ENDPOINT,
+      backendEndpoint: true,
     },
   },
   eslint: {
@@ -23,11 +26,8 @@ export default defineNuxtConfig({
   unocss: {
     nuxtLayers: true,
   },
-  logto: {
-    pathnames: {
-      signIn: '/login',
-      signOut: '/logout',
-      callback: '/auth/callback',
-    },
+
+  supabase: {
+    redirect: false,
   },
 })

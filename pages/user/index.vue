@@ -1,11 +1,10 @@
 <template>
-  <div>
-    callBack
-  </div>
+  <div>user</div>
 </template>
 
 <script setup lang="ts">
-
+onMounted(() => {
+})
 </script>
 
 <style scoped>
