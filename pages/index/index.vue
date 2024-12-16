@@ -1,31 +1,24 @@
 <script setup lang="ts">
-import { customFetch } from '~/api/requires'
+import { useLogto, type IdTokenClaims } from '@logto/vue'
 
-const user = {}
-
-// console.log(user, 'user')
-// const fetchLibrary = async () => {
-//   const { data } = await customFetch('/api/user', {
-//     method: 'POST',
-//     body: {
-//       userId: user?.sub,
-//     },
-//   })
-//   // console.log(data.value, 'uesr111')
-// }
-// fetchLibrary()
-
-// console.log(first)
-const userInfo = ref()
+const supabase = useSupabaseClient()
+const { isAuthenticated, getIdTokenClaims } = useLogto()
+const user = ref<IdTokenClaims>()
+if (isAuthenticated.value) {
+  (async () => {
+    const claims = await getIdTokenClaims()
+    user.value = claims
+    const { data, error } = await supabase
+      .from('user')
+      .insert([
+        { user_id: claims.sub, email: claims.email },
+      ])
+      .select()
+  })()
+}
 
 onMounted(async () => {
-  // const u = await customFetch('/api/user/asyncUser', {
-  //   method: 'POST',
-  //   body: {
-  //     userId: userInfo.value?.sub,
-  //   },
-  // })
-  // console.log(u, 'uuu')
+
 })
 </script>
 
@@ -39,18 +32,6 @@ onMounted(async () => {
         <b>{{ key }}:</b> {{ value }}
       </li>
     </ul>
-
-    <a
-      v-if="Boolean(user)"
-      :href="'/logout'"
-      class="mr-20px"
-    >
-      跳转到 logout
-    </a>
-    <a
-      v-else
-      :href="'/login'"
-      class="mr-20px"
-    > 跳转到 login1 </a>
+    <UButton>你看</UButton>
   </div>
 </template>

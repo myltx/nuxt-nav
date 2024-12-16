@@ -29,6 +29,7 @@
     "@commitlint/config-conventional": "^19.5.0",
     "@nuxt/eslint": "^0.5.7",
     "@nuxt/eslint-config": "^0.5.7",
+    "@nuxt/ui": "^2.20.0",
     "@nuxtjs/stylelint-module": "^5.2.0",
     "@nuxtjs/supabase": "^1.4.3",
     "@unocss/nuxt": "^0.65.1",

@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@unocss/nuxt',
     '@nuxtjs/supabase',
+    '@nuxt/ui',
   ],
   runtimeConfig: {
     logtoAppId: process.env.NUXT_LOGTO_APP_ID,
