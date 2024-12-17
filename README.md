@@ -24,11 +24,11 @@
 	```
 2. 安装依赖
    ```shell
-   	npm install
+   npm install
    ```
 3. 启动项目
    ```shell
-   	pnpm dev
+   pnpm dev
    ```
 # 注意事项
 1. node 版本需要 20 以上
