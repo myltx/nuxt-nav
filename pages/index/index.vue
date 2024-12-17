@@ -1,19 +1,31 @@
 <script setup lang="ts">
 import { useLogto, type IdTokenClaims } from '@logto/vue'
 
-const supabase = useSupabaseClient()
 const { isAuthenticated, getIdTokenClaims } = useLogto()
 const user = ref<IdTokenClaims>()
 if (isAuthenticated.value) {
   (async () => {
     const claims = await getIdTokenClaims()
     user.value = claims
-    const { data, error } = await supabase
-      .from('user')
-      .insert([
-        { user_id: claims.sub, email: claims.email },
-      ])
-      .select()
+    const { data } = await useFetch('/api/user/getUserInfo', {
+      method: 'POST',
+      body: {
+        userId: claims?.sub,
+      },
+    })
+    console.log(data.value, 'ddd')
+
+    if (data.value && Object.keys(data.value).length) {
+      console.log('登录成功')
+    }
+    else {
+      useFetch('/api/user/addUser', {
+        method: 'POST',
+        body: {
+          user: claims,
+        },
+      })
+    }
   })()
 }
 
