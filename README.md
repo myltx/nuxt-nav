@@ -38,5 +38,6 @@
 - [X] logto 模块添加调试
 - [x] logto 登录后用户数据添加到 supabase
 - [ ] supabase api 封装
+- [ ] 暗黑主题配置
 - [ ] 展示布局开发
 - [ ] 后台功能设计
