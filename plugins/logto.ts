@@ -4,7 +4,6 @@ import { defineNuxtPlugin, useRuntimeConfig } from 'nuxt/app'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig()
-  console.log(runtimeConfig, 'runtimeConfig')
   const config: LogtoConfig = {
     endpoint: runtimeConfig?.public?.logtoEndpoint,
     appId: runtimeConfig?.public?.logtoAppId,
@@ -17,6 +16,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     ],
     //     resources: [runtimeConfig?.public.backendEndpoint],
   }
-  console.log(config, 'config')
   nuxtApp.vueApp.use(createLogto, config)
 })
