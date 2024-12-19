@@ -1,8 +1,6 @@
 <template>
-  <div class="flex items-center justify-between h-16 px-4">
-    <div class="logo">
-      myltx-nav
-    </div>
+  <div class="flex items-center justify-between h-12 shadow mb-2 px-2 rounded-2">
+    <div>handy website 后台管理</div>
     <div class="flex items-center">
       <UDropdown
         :items="items"
@@ -64,18 +62,9 @@ const items = [
     slot: 'account',
     disabled: true,
   }], [{
-    label: 'Settings',
-    icon: 'i-heroicons-cog-8-tooth',
-  }], [{
-    label: '后台管理',
-    key: 'admin',
+    label: '看看效果',
+    key: 'frontend',
     icon: 'i-heroicons-book-open',
-  }, {
-    label: 'Changelog',
-    icon: 'i-heroicons-megaphone',
-  }, {
-    label: 'Status',
-    icon: 'i-heroicons-signal',
   }], [{
     label: 'Sign out',
     icon: 'i-heroicons-arrow-left-on-rectangle',
@@ -83,8 +72,8 @@ const items = [
 ] as DropdownItem[][]
 const handleDropdownItemClick = (item: DropdownItem) => {
   console.log('handleDropdownItemClick', item)
-  if (item.key === 'admin') {
-    router.push('/admin/home')
+  if (item.key === 'frontend') {
+    router.push('/')
   }
 }
 </script>
