@@ -18,9 +18,11 @@
   "dependencies": {
     "@logto/node": "^3.0.3",
     "@logto/vue": "^3.0.3",
+    "@pinia/nuxt": "^0.9.0",
     "@supabase/supabase-js": "^2.47.1",
     "@types/jsonwebtoken": "^9.0.7",
     "nuxt": "^3.13.0",
+    "pinia": "^2.3.0",
     "vue": "latest",
     "vue-router": "latest"
   },

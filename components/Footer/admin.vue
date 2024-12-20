@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-4">
     <UDivider label="底部" />
   </div>
 </template>

@@ -2,21 +2,36 @@
   <div>
     <!-- 当正在处理中 -->
     <p v-if="isLoading">
-      正在重定向...
+      正在登录中...
     </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useHandleSignInCallback, useLogto } from '@logto/vue'
+import { useHandleSignInCallback } from '@logto/vue'
+import { fetchUserInfo } from '~/server/auth'
+import { useUserStore } from '~/store/user'
 
-const supabase = useSupabaseClient()
-const { getIdTokenClaims } = useLogto()
+definePageMeta({
+  layout: false,
+})
+
+const userStore = useUserStore()
 
 const { isLoading } = useHandleSignInCallback(async () => {
   console.log('回调')
   // 完成后执行某些操作，例如重定向到主页
-  const claims = await getIdTokenClaims()
+  const res = await fetchUserInfo()
+  const { data } = await useFetch('/api/user/getToken', {
+    method: 'post',
+    body: {
+      userId: res?.sub,
+    },
+  })
+  userStore.initUser({
+    ...res,
+    ...data?.value?.data,
+  })
 
   navigateTo('/')
 })

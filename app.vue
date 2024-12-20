@@ -1,6 +1,6 @@
 <template>
   <!-- 首页加载全屏动画 -->
-  <FullLoading v-if="isFullLoading" />
+  <FullLoading v-if="status === 'pending'" />
   <NuxtLayout>
     <!-- 在页面导航之间显示一个进度条 -->
     <NuxtLoadingIndicator />
@@ -9,17 +9,24 @@
 </template>
 
 <script setup lang="ts">
-const nuxtApp = useNuxtApp()
+import { getIdTokenClaims, isAuthenticated } from './server/auth'
+import { useUserStore } from './store/user'
 
-// 是否首次加载
-const isFullLoading = ref(true)
-
-nuxtApp.hook('page:start', () => {
-  isFullLoading.value = true
-})
-
-nuxtApp.hook('page:finish', () => {
-  isFullLoading.value = false
+const userStore = useUserStore()
+const { status } = useAsyncData('initApplication', async () => {
+  if (isAuthenticated()) {
+    const res = await getIdTokenClaims()
+    const { data } = await useFetch('/api/user/getToken', {
+      method: 'post',
+      body: {
+        userId: res?.sub,
+      },
+    })
+    userStore.initUser({
+      ...res,
+      ...data?.value?.data,
+    })
+  }
 })
 </script>
 

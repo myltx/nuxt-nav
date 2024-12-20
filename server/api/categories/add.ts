@@ -3,7 +3,8 @@ import { serverSupabaseClient } from '#supabase/server'
 export default eventHandler(async (event) => {
   // 解析请求体，获取 userId
   const body = await readBody(event)
-  const { userId } = body
+  const { user } = body
+  console.log(user, 'user')
 
   // 初始化 Supabase 客户端
   const client = await serverSupabaseClient(event)
@@ -15,10 +16,11 @@ export default eventHandler(async (event) => {
   //   }
 
   // 使用 Supabase 查询数据库
-  const { data, error } = await client
-    .from('user') // 替换为你的表名
-    .select('*') // 选择所有字段，或者根据需要选择特定字段
-    .eq('user_id', userId) // 'user_id' 是你查询的字段名
+  const { data: users, error } = await client.from('categories')
+    .insert([
+      { user_id: user.sub, email: user.email },
+    ])
+    .select()
 
   if (error) {
     throw createError({
@@ -27,11 +29,8 @@ export default eventHandler(async (event) => {
     })
   }
 
-  // 如果查询到的 data 是数组且有数据，取第一个元素
-  if (data && data.length > 0) {
-    return data[0] // 直接返回第一个用户对象
+  // 返回用户信息和数据库查询结果
+  return {
+    users,
   }
-
-  // 如果没有找到数据，返回一个空对象或适当的错误信息
-  return {} // 或者抛出 404 错误
 })

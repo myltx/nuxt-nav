@@ -12,9 +12,11 @@
         <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" />
 
         <template #account="{ item }">
-          <div class="text-left">
+          <div
+            class="text-left"
+          >
             <p>
-              Signed in as
+              {{ !isAuthenticated() ? '请先登录':'Signed in as' }}
             </p>
             <p class="truncate font-medium text-gray-900 dark:text-white">
               {{ item.label }}
@@ -50,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import { signOut, isAuthenticated, signIn } from '~/server/auth'
+
 const router = useRouter()
 
 type DropdownItem = {
@@ -57,34 +61,55 @@ type DropdownItem = {
   icon?: string
   disabled?: boolean
   key?: string
+  show?: boolean
 }
 const items = [
   [{
-    label: 'ben@example.com',
+    label: '',
     slot: 'account',
     disabled: true,
-  }], [{
-    label: 'Settings',
-    icon: 'i-heroicons-cog-8-tooth',
-  }], [{
+  }],
+  //  [{
+  //   label: 'Settings',
+  //   icon: 'i-heroicons-cog-8-tooth',
+  // }],
+  [{
     label: '后台管理',
     key: 'admin',
     icon: 'i-heroicons-book-open',
-  }, {
-    label: 'Changelog',
-    icon: 'i-heroicons-megaphone',
-  }, {
-    label: 'Status',
-    icon: 'i-heroicons-signal',
-  }], [{
-    label: 'Sign out',
+  },
+  //  {
+  //   label: 'Changelog',
+  //   icon: 'i-heroicons-megaphone',
+  // }, {
+  //   label: 'Status',
+  //   icon: 'i-heroicons-signal',
+  // }
+  ],
+  [{
+    label: '退出登录',
+    key: 'signOut',
+    show: !isAuthenticated(),
     icon: 'i-heroicons-arrow-left-on-rectangle',
-  }],
+  },
+  {
+    label: '登录',
+    key: 'signIn',
+    show: isAuthenticated(),
+    icon: 'i-heroicons-arrow-right-on-rectangle',
+  },
+  ],
 ] as DropdownItem[][]
 const handleDropdownItemClick = (item: DropdownItem) => {
   console.log('handleDropdownItemClick', item)
   if (item.key === 'admin') {
     router.push('/admin/home')
+  }
+  else if (item.key === 'signOut') {
+    signOut()
+  }
+  else if (item.key === 'signIn') {
+    signIn()
   }
 }
 </script>

@@ -1,14 +1,14 @@
 <template>
   <div class="p-2">
     <HeaderAdmin />
-    <div class="flex justify-between items-start">
+    <div class="flex justify-between items-start h-210">
       <UVerticalNavigation
         :links="links"
-        class="w-1/5 shadow min-h-215 overflow-y-auto"
+        class="w-1/8 shadow min-h-100% overflow-y-auto"
         :class="$colorMode.value === 'dark' ? 'shadow-gray' : 'shadow'"
       />
       <div
-        class="w-full p-2 h-215 overflow-y-auto"
+        class="w-full p-2 h-100% overflow-y-auto mx-3"
         :class="$colorMode.value === 'dark' ? 'bg-gray-800 shadow-gray' : 'bg-gray-50 shadow'"
       >
         <slot />

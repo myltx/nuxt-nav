@@ -15,21 +15,20 @@
         <div>
           <UButton
             color="gray"
-            class="mr-2"
           >
             重置
           </UButton>
-          <UButton>查询</UButton>
+          <UButton class="mx-2">
+            查询
+          </UButton>
+          <UButton @click="openEditModalFn">
+            新增
+          </UButton>
         </div>
-      </div>
-      <div class="mt-2 flex items-center justify-end b-t-1 pt-2">
-        <UButton @click="openEditModalFn">
-          新增
-        </UButton>
       </div>
     </div>
     <div
-      class="shadow p-2 rounded-2 mt-2 h-81%"
+      class="shadow p-2 rounded-2 mt-2 h-86%"
       :class="$colorMode.value === 'dark' ? 'bg-black' : 'bg-white'"
     >
       <UTable :rows="people" />
