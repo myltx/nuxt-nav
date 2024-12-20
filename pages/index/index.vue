@@ -7,7 +7,7 @@ if (isAuthenticated.value) {
   (async () => {
     const claims = await getIdTokenClaims()
     user.value = claims
-    const { data } = await useFetch('/api/user/getUserInfo', {
+    const { data } = await useFetchWithAuth('/api/user/getUserInfo', {
       method: 'POST',
       body: {
         userId: claims?.sub,
@@ -19,7 +19,7 @@ if (isAuthenticated.value) {
       console.log('登录成功')
     }
     else {
-      useFetch('/api/user/addUser', {
+      useFetchWithAuth('/api/user/addUser', {
         method: 'POST',
         body: {
           user: claims,

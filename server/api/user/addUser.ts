@@ -16,7 +16,7 @@ export default eventHandler(async (event) => {
   //   }
 
   // 使用 Supabase 查询数据库
-  const { data: users, error } = await client.from('user')
+  const { data: users, error } = await client.from('users')
     .insert([
       { user_id: user.sub, email: user.email },
     ])

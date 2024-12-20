@@ -17,7 +17,7 @@ export default eventHandler(async (event) => {
   let userInfo
 
   // 使用 Supabase 查询数据库
-  const { data: users, error } = await client.from('user').select('*').eq('id', userId)
+  const { data: users, error } = await client.from('users').select('*').eq('id', userId)
 
   if (error) {
     throw createError({

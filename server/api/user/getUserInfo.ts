@@ -16,7 +16,7 @@ export default eventHandler(async (event) => {
 
   // 使用 Supabase 查询数据库
   const { data, error } = await client
-    .from('user') // 替换为你的表名
+    .from('users') // 替换为你的表名
     .select('*') // 选择所有字段，或者根据需要选择特定字段
     .eq('user_id', userId) // 'user_id' 是你查询的字段名
 
