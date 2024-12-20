@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { useLogto, type IdTokenClaims } from '@logto/vue'
+import getUserInfo from '~/api/user'
+import { useUserStore } from '~/store/user'
 
 const { isAuthenticated, getIdTokenClaims } = useLogto()
 const user = ref<IdTokenClaims>()
+
+const userStore = useUserStore()
+console.log(userStore, 'userStore')
 if (isAuthenticated.value) {
   (async () => {
     const claims = await getIdTokenClaims()
     user.value = claims
-    const { data } = await useFetchWithAuth('/api/user/getUserInfo', {
-      method: 'POST',
-      body: {
-        userId: claims?.sub,
-      },
+    const { data } = await getUserInfo({
+      userId: claims?.sub,
     })
     console.log(data.value, 'ddd')
 
@@ -19,7 +21,7 @@ if (isAuthenticated.value) {
       console.log('登录成功')
     }
     else {
-      useFetchWithAuth('/api/user/addUser', {
+      useFetch('/api/user/addUser', {
         method: 'POST',
         body: {
           user: claims,

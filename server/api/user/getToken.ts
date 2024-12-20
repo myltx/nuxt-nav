@@ -8,9 +8,12 @@ export default eventHandler(async (event) => {
   if (userId) {
     const jwtPayload = {
       userId,
+      jti: runtimeConfig.public.jti,
     }
     // 生成 token
-    const token = jwt.sign(jwtPayload, runtimeConfig.public.supabaseJwtSecret)
+    const token = jwt.sign(jwtPayload, runtimeConfig.public.supabaseJwtSecret, {
+      expiresIn: '1d',
+    })
     return {
       code: 200,
       success: true,

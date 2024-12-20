@@ -1,7 +1,5 @@
 import { useLogto } from '@logto/vue'
 
-import jwt from 'jsonwebtoken'
-
 let logto: ReturnType<typeof useLogto>
 let runtimeConfig: ReturnType<typeof useRuntimeConfig>
 export async function setupAuth() {
@@ -22,10 +20,9 @@ export function isAuthenticated() {
   return logto.isAuthenticated.value
 }
 
-export async function getToken() {
-  const accessToken = await logto.getAccessToken()
-
-  return accessToken
+export function getToken() {
+  // console.log(userStore.user, 'user')
+  return ''
 }
 export function fetchUserInfo() {
   return logto.fetchUserInfo()

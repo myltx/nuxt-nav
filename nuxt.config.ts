@@ -10,13 +10,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   plugins: ['~/plugins/logto.ts'],
   modules: [
+    '@pinia/nuxt',
     '@nuxt/eslint',
     '@unocss/nuxt',
     '@nuxtjs/supabase',
     '@nuxt/ui',
     '@nuxtjs/color-mode',
     '@nuxt/icon',
-    '@pinia/nuxt',
   ],
   runtimeConfig: {
     logtoAppId: process.env.NUXT_LOGTO_APP_ID,
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       supabaseUrl: process.env.SUPABASE_URL || '',
       supabaseKey: process.env.SUPABASE_KEY || '',
       supabaseJwtSecret: process.env.SUPABASE_JWT_SECRET || '',
-      customKey: process.env.CUSTOM_KEY || '',
+      jti: process.env.JTI || '',
     },
   },
   eslint: {

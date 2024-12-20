@@ -26,6 +26,8 @@ export const useUserStore = defineStore('user', () => {
   function initUser(val: User) {
     console.log(val, 'vvv')
     user.value = val
+    sessionStorage.setItem('token', val.token)
+    sessionStorage.setItem('user', JSON.stringify(val))
   }
   return {
     user,
