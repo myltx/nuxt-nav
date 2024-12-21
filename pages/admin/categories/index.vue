@@ -31,7 +31,11 @@
       class="shadow p-2 rounded-2 mt-2 h-86%"
       :class="$colorMode.value === 'dark' ? 'bg-black' : 'bg-white'"
     >
-      <UTable :rows="people" />
+      <UTable
+        :rows="people"
+        :columns="columns"
+        :loading="loading"
+      />
     </div>
     <div
       class="shadow p-2 rounded-2 mt-2"
@@ -106,7 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FormError, FormSubmitEvent } from '#ui/types'
+import type { FormError } from '#ui/types'
+import { getCategories, addCategories } from '~/api/categories'
 
 definePageMeta({
   layout: 'admin',
@@ -125,7 +130,34 @@ const closeEditModalFn = () => {
   openEditModal.value = false
 }
 
+const loading = ref(true)
 const people = ref([])
+const columns = ref([{
+  key: 'name',
+  label: '分类名称',
+}, {
+  key: 'description',
+  label: '描述',
+},
+{
+  key: 'created_at',
+  label: '创建时间',
+  render(h) {
+    return 123
+  },
+},
+{
+  key: 'updated_at',
+  label: '更新时间',
+},
+{
+  key: 'action',
+  label: '操作',
+  width: 100,
+  align: 'center',
+},
+
+])
 
 const state = reactive({
   name: undefined,
@@ -141,8 +173,28 @@ const validate = (state: any): FormError[] => {
 
 async function onSubmit() {
   // Do something with data
-  const data = await form.value.validate()
+  const submitData = await form.value.validate()
+  const data = await addCategories(submitData)
   console.log(data)
+}
+
+// 这里获取列表数据
+onMounted(() => {
+  getList()
+})
+
+const getList = async () => {
+  loading.value = true
+  try {
+    const data = await getCategories({})
+    if (data.code === 200) {
+      people.value = data.data
+    }
+    loading.value = false
+  }
+  catch (err) {
+    loading.value = false
+  }
 }
 </script>
 

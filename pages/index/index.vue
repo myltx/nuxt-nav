@@ -12,9 +12,7 @@ if (isAuthenticated.value) {
   (async () => {
     const claims = await getIdTokenClaims()
     user.value = claims
-    const { data } = await getUserInfo({
-      userId: claims?.sub,
-    })
+    const { data } = await getUserInfo()
     console.log(data.value, 'ddd')
 
     if (data.value && Object.keys(data.value).length) {
