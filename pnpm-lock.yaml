@@ -70,6 +70,9 @@ devDependencies:
   cz-conventional-changelog:
     specifier: ^3.3.0
     version: 3.3.0(@types/node@22.5.4)(typescript@5.6.2)
+  dayjs:
+    specifier: ^1.11.13
+    version: 1.11.13
   eslint:
     specifier: ^9.10.0
     version: 9.10.0
@@ -79,6 +82,9 @@ devDependencies:
   jsonwebtoken:
     specifier: ^9.0.2
     version: 9.0.2
+  lodash-es:
+    specifier: ^4.17.21
+    version: 4.17.21
   typescript:
     specifier: ^5.6.2
     version: 5.6.2
@@ -4929,6 +4935,10 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
+    dev: true
+
   /db0@0.1.4:
     resolution: {integrity: sha512-Ft6eCwONYxlwLjBXSJxw0t0RYtA5gW9mq8JfBXn9TtC0nDPlqePAhpv9v4g9aONBi6JI1OXHTKKkUYGd+BOrCA==}
     peerDependencies:
@@ -6945,6 +6955,10 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       p-locate: 6.0.0
+    dev: true
+
+  /lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: true
 
   /lodash.camelcase@4.3.0:

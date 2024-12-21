@@ -5,7 +5,7 @@ import { generateRequestSuccessData } from '~/server/utils'
 export default eventHandler(async (event) => {
   // 解析请求体，获取 userId
   const body = await readBody(event)
-  const { name, description } = body
+  const { name } = body
 
   // 从请求头中获取 Authorization Token
   const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
@@ -20,9 +20,9 @@ export default eventHandler(async (event) => {
   // 使用 Supabase 查询数据库
 
   const { data, error } = await client
-    .from('categories')
+    .from('tags')
     .insert([
-      { name, description, user_id: decoded?.userId },
+      { name, user_id: decoded?.userId },
     ])
     .select()
 

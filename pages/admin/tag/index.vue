@@ -80,13 +80,6 @@
             >
               <UInput v-model="state.name" />
             </UFormGroup>
-
-            <UFormGroup
-              label="描述"
-              name="description"
-            >
-              <UTextarea v-model="state.description" />
-            </UFormGroup>
           </UForm>
         </div>
         <template #footer>
@@ -111,10 +104,14 @@
 
 <script setup lang="ts">
 import type { FormError } from '#ui/types'
-import { getCategories, addCategories } from '~/api/categories'
+import { getTags, addTag } from '~/api/tag'
 
 definePageMeta({
   layout: 'admin',
+})
+
+const state = reactive({
+  name: undefined,
 })
 const value = ref('')
 const form = ref()
@@ -135,16 +132,10 @@ const people = ref([])
 const columns = ref([{
   key: 'name',
   label: '分类名称',
-}, {
-  key: 'description',
-  label: '描述',
 },
 {
   key: 'created_at',
   label: '创建时间',
-  render(h) {
-    return 123
-  },
 },
 {
   key: 'updated_at',
@@ -159,22 +150,16 @@ const columns = ref([{
 
 ])
 
-const state = reactive({
-  name: undefined,
-  description: undefined,
-})
-
 const validate = (state: any): FormError[] => {
   const errors = []
   if (!state.name) errors.push({ path: 'name', message: '请输入' })
-  if (!state.description) errors.push({ path: 'description', message: '请输入' })
   return errors
 }
 
 async function onSubmit() {
   // Do something with data
   const submitData = await form.value.validate()
-  const data = await addCategories(submitData)
+  const data = await addTag(submitData)
   console.log(data)
   closeEditModalFn()
   getList()
@@ -188,7 +173,7 @@ onMounted(() => {
 const getList = async () => {
   loading.value = true
   try {
-    const data = await getCategories({})
+    const data = await getTags({})
     if (data.code === 200) {
       people.value = data.data
     }
@@ -200,6 +185,6 @@ const getList = async () => {
 }
 </script>
 
-<style scoped>
+      <style scoped>
 
-</style>
+      </style>

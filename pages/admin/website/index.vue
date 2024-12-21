@@ -75,17 +75,80 @@
             class="space-y-4"
           >
             <UFormGroup
-              label="分类名称"
-              name="name"
+              label="站点名称"
+              name="title"
             >
-              <UInput v-model="state.name" />
+              <UInput
+                v-model="state.title"
+                placeholder="请输入站点名称"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              label="站点地址"
+              name="url"
+            >
+              <UInput
+                v-model="state.url"
+                placeholder="请输入站点地址"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              label="站点分类"
+              name="categoryId"
+            >
+              <USelectMenu
+                v-model="state.categoryId"
+                :options="categorys"
+                value-attribute="id"
+                option-attribute="name"
+                placeholder="请选择分类"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              label="站点标签"
+              name="tags"
+            >
+              <USelectMenu
+                v-model="state.tags"
+                :options="tags"
+                value-attribute="id"
+                option-attribute="name"
+                placeholder="请选择标签"
+                multiple
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              label="站点Logo"
+              name="logo"
+            >
+              <UInput
+                v-model="state.logo"
+                placeholder="请输入图片地址或者上传图片"
+              />
+            </UFormGroup>
+
+            <UFormGroup
+              label="站点图片"
+              name="image"
+            >
+              <UInput
+                v-model="state.image"
+                placeholder="请输入图片地址或者上传图片"
+              />
             </UFormGroup>
 
             <UFormGroup
               label="描述"
               name="description"
             >
-              <UTextarea v-model="state.description" />
+              <UTextarea
+                v-model="state.description"
+                placeholder="请输入描述"
+              />
             </UFormGroup>
           </UForm>
         </div>
@@ -111,7 +174,9 @@
 
 <script setup lang="ts">
 import type { FormError } from '#ui/types'
-import { getCategories, addCategories } from '~/api/categories'
+import { getCategories } from '~/api/categories'
+import { getTags } from '~/api/tag'
+import { addWebsite, getWebsites } from '~/api/website'
 
 definePageMeta({
   layout: 'admin',
@@ -121,6 +186,8 @@ const form = ref()
 const page = ref(1)
 const items = ref(Array(55))
 const openEditModal = ref(false)
+const categorys = ref([])
+const tags = ref([])
 
 const openEditModalFn = () => {
   openEditModal.value = true
@@ -142,9 +209,6 @@ const columns = ref([{
 {
   key: 'created_at',
   label: '创建时间',
-  render(h) {
-    return 123
-  },
 },
 {
   key: 'updated_at',
@@ -160,21 +224,31 @@ const columns = ref([{
 ])
 
 const state = reactive({
-  name: undefined,
+  title: undefined,
+  url: undefined,
   description: undefined,
+  image: undefined,
+  categoryId: undefined,
+  logo: undefined,
+  tags: undefined,
 })
 
 const validate = (state: any): FormError[] => {
   const errors = []
-  if (!state.name) errors.push({ path: 'name', message: '请输入' })
-  if (!state.description) errors.push({ path: 'description', message: '请输入' })
+  if (!state.title) errors.push({ path: 'title', message: '请输入站点名称' })
+  if (!state.categoryId) errors.push({ path: 'categoryId', message: '请选择分类' })
+  if (!state.tags) errors.push({ path: 'tags', message: '请选择标签' })
+  if (!state.url) errors.push({ path: 'url', message: '请输入站点地址' })
+  if (!state.description) errors.push({ path: 'description', message: '请输入描述' })
+  if (!state.image) errors.push({ path: 'image', message: '请上传图片' })
   return errors
 }
 
 async function onSubmit() {
   // Do something with data
   const submitData = await form.value.validate()
-  const data = await addCategories(submitData)
+  console.log(submitData)
+  const data = await addWebsite(submitData)
   console.log(data)
   closeEditModalFn()
   getList()
@@ -183,12 +257,13 @@ async function onSubmit() {
 // 这里获取列表数据
 onMounted(() => {
   getList()
+  getSelectData()
 })
 
 const getList = async () => {
   loading.value = true
   try {
-    const data = await getCategories({})
+    const data = await getWebsites({})
     if (data.code === 200) {
       people.value = data.data
     }
@@ -197,6 +272,14 @@ const getList = async () => {
   catch (err) {
     loading.value = false
   }
+}
+const getSelectData = () => {
+  getCategories({}).then((res) => {
+    categorys.value = res.data
+  })
+  getTags({}).then((res) => {
+    tags.value = res.data
+  })
 }
 </script>
 

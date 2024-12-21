@@ -1,11 +1,16 @@
 import { verifyJwtToken } from '../../utils/auth'
 import { serverSupabaseClient } from '#supabase/server'
-import { generateRequestSuccessData } from '~/server/utils'
+import { camelToSnake, generateRequestSuccessData } from '~/server/utils'
 
 export default eventHandler(async (event) => {
   // 解析请求体，获取 userId
   const body = await readBody(event)
-  const { name, description } = body
+  const submitData = {} as any
+
+  for (const key in body) {
+    submitData[camelToSnake(key)] = body[key]
+  }
+  delete submitData.tags
 
   // 从请求头中获取 Authorization Token
   const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
@@ -20,11 +25,32 @@ export default eventHandler(async (event) => {
   // 使用 Supabase 查询数据库
 
   const { data, error } = await client
-    .from('categories')
+    .from('websites')
     .insert([
-      { name, description, user_id: decoded?.userId },
+      { ...submitData, user_id: decoded?.userId },
     ])
     .select()
+
+  if (data && data.length) {
+    const websiteId = data[0].id
+    const tags = body.tags
+    if (tags && tags.length) {
+      const subTags = tags.map((tag: string) => {
+        return { tag_id: tag, website_id: websiteId }
+      })
+      const { error: tagError } = await client
+        .from('website_tags')
+        .insert(
+          subTags,
+        )
+      if (tagError) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: `Supabase query failed: ${tagError.message}`,
+        })
+      }
+    }
+  }
 
   if (error) {
     // return generateRequestErrorData(500, 'Supabase query failed')

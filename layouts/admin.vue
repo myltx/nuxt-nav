@@ -1,7 +1,7 @@
 <template>
   <div class="p-2">
     <HeaderAdmin />
-    <div class="flex justify-between items-start h-210">
+    <div class="flex justify-between items-start h-176">
       <UVerticalNavigation
         :links="links"
         class="w-1/8 shadow min-h-100% overflow-y-auto"
@@ -33,9 +33,19 @@ const links = [
     to: '/admin/home',
   },
   {
+    label: '站点管理',
+    icon: 'i-heroicons-chart-bar',
+    to: '/admin/website',
+  },
+  {
     label: '分类管理',
     icon: 'i-heroicons-chart-bar',
     to: '/admin/categories',
+  },
+  {
+    label: '标签管理',
+    icon: 'i-heroicons-chart-bar',
+    to: '/admin/tag',
   },
 ]
 </script>

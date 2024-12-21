@@ -32,7 +32,6 @@ CREATE TABLE websites (
   visit_count INTEGER DEFAULT 0,  -- 访问次数
   logo VARCHAR(255),  -- 网站的 logo URL
   image VARCHAR(255),  -- 网站的图片 URL
-  tags TEXT[],  -- 网站标签
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -46,6 +45,8 @@ CREATE TABLE website_access_logs (
   website_id INTEGER REFERENCES websites(id) ON DELETE CASCADE,  -- 外键关联网站表
   access_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 记录访问时间
   UNIQUE(user_id, website_id, access_time)  -- 保证同一用户同一时间不会重复访问
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- 更新时间
 );
 ```
 ## 4. 标签表 (tags)
@@ -54,6 +55,8 @@ CREATE TABLE website_access_logs (
 CREATE TABLE tags (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) UNIQUE NOT NULL  -- 标签名称
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- 更新时间
 );
 ```
 ## 5. 网站标签关联表 (website_tags)
@@ -63,6 +66,8 @@ CREATE TABLE website_tags (
   website_id INTEGER REFERENCES websites(id) ON DELETE CASCADE,  -- 外键关联网站
   tag_id INTEGER REFERENCES tags(id) ON DELETE CASCADE,  -- 外键关联标签
   PRIMARY KEY (website_id, tag_id)
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- 更新时间
 );
 ```
 ## 7. 分类表 (categories)
@@ -83,5 +88,7 @@ CREATE TABLE website_categories (
   website_id INTEGER REFERENCES websites(id) ON DELETE CASCADE,  -- 外键关联网站
   category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE,  -- 外键关联分类
   PRIMARY KEY (website_id, category_id)
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- 更新时间
 );
 ```

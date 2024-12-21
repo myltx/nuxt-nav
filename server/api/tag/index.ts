@@ -20,12 +20,11 @@ export default eventHandler(async (event) => {
     const client = await serverSupabaseClient(event)
     // 使用 Supabase 查询数据库
     const { data, error } = await client
-      .from('categories') // 替换为你的表名
+      .from('tags') // 替换为你的表名
       .select('*') // 选择所有字段，或者根据需要选择特定字段
       // .eq('user_id', userId) // 'user_id' 是你查询的字段名
 
     if (error) {
-      // return generateRequestErrorData(500, 'Supabase query failed')
       throw createError({
         statusCode: 500,
         statusMessage: `Supabase query failed: ${error.message}`,
