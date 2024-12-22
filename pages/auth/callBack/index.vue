@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { useHandleSignInCallback } from '@logto/vue'
+import getUserInfo from '~/api/user'
 import { fetchUserInfo } from '~/server/auth'
 import { useUserStore } from '~/store/user'
 
@@ -28,8 +29,11 @@ const { isLoading } = useHandleSignInCallback(async () => {
       userId: res?.sub,
     },
   })
+  const user = await getUserInfo()
+  console.log(user, 'user')
   userStore.initUser({
     ...res,
+    user,
     ...data?.value?.data,
   })
 

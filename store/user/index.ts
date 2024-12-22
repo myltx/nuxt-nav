@@ -6,6 +6,7 @@ export interface User {
   email: string
   avatar: string
   token: string
+  user: any
 }
 export const useUserStore = defineStore('user', () => {
   const user = ref<User>()
@@ -23,8 +24,7 @@ export const useUserStore = defineStore('user', () => {
     //     user.value.avatar = res.avatar
   }
 
-  function initUser(val: User) {
-    console.log(val, 'vvv')
+  function initUser(val: any) {
     user.value = val
     sessionStorage.setItem('token', val.token)
     sessionStorage.setItem('user', JSON.stringify(val))

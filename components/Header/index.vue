@@ -23,22 +23,27 @@
         class="h-6 w-6 rounded-full mr-2"
         alt=""
       >
-      myltx-nav
+      handy website
     </div>
     <div class="flex items-center">
       <UDropdown
-        :items="items"
+        :items="showItems"
         :ui="{ item: { disabled: 'cursor-text select-text' } }"
         :popper="{ placement: 'bottom-start' }"
       >
-        <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" />
-
+        <UAvatar :src="user?.user?.avatar" />
         <template #account="{ item }">
           <div
             class="text-left"
           >
+            <p v-if="!isAuthenticated()">
+              请先登录
+            </p>
             <p>
-              {{ !isAuthenticated() ? '请先登录':'Signed in as' }}
+              {{ user?.user?.nikeName }}
+            </p>
+            <p>
+              {{ user?.email }}
             </p>
             <p class="truncate font-medium text-gray-900 dark:text-white">
               {{ item.label }}
@@ -75,8 +80,10 @@
 
 <script setup lang="ts">
 import { signOut, isAuthenticated, signIn } from '~/server/auth'
+import { useUserStore } from '~/store/user'
 
 const router = useRouter()
+const { user } = useUserStore()
 
 type DropdownItem = {
   label: string
@@ -90,38 +97,35 @@ const items = [
     label: '',
     slot: 'account',
     disabled: true,
+    // show: isAuthenticated(),
+    show: true,
   }],
-  //  [{
-  //   label: 'Settings',
-  //   icon: 'i-heroicons-cog-8-tooth',
-  // }],
-  [{
-    label: '后台管理',
-    key: 'admin',
-    icon: 'i-heroicons-book-open',
-  },
-  //  {
-  //   label: 'Changelog',
-  //   icon: 'i-heroicons-megaphone',
-  // }, {
-  //   label: 'Status',
-  //   icon: 'i-heroicons-signal',
-  // }
+  [
+    {
+      label: '后台管理',
+      key: 'admin',
+      icon: 'i-heroicons-book-open',
+      show: isAuthenticated(),
+    },
   ],
   [{
     label: '退出登录',
     key: 'signOut',
-    show: !isAuthenticated(),
+    show: isAuthenticated(),
     icon: 'i-heroicons-arrow-left-on-rectangle',
   },
   {
     label: '登录',
     key: 'signIn',
-    show: isAuthenticated(),
+    show: !isAuthenticated(),
     icon: 'i-heroicons-arrow-right-on-rectangle',
   },
   ],
 ] as DropdownItem[][]
+const showItems = ref<DropdownItem[][]>([])
+watchEffect(() => {
+  showItems.value = items.map(subArr => subArr.filter(item => item.show)).filter(item => item.length)
+})
 const handleDropdownItemClick = (item: DropdownItem) => {
   console.log('handleDropdownItemClick', item)
   if (item.key === 'admin') {

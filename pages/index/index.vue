@@ -5,10 +5,12 @@ import { getWebsitesNoPage } from '~/api/website'
 
 const categorys = ref([])
 const tags = ref([])
+const activeTab = ref(0)
 const websites = ref([])
 
-const onChange = (index: number) => {
-  console.log(index)
+const onChangeTab = (id: number) => {
+  console.log(id)
+  activeTab.value = id
 }
 
 const getSelectData = () => {
@@ -20,6 +22,9 @@ const getSelectData = () => {
         value: item.id,
       }
     })
+    if (res.data.length) {
+      activeTab.value = res.data[0].id
+    }
   })
   getTags({}).then((res) => {
     tags.value = res.data
@@ -39,11 +44,22 @@ onMounted(async () => {
 
 <template>
   <div class="mt-2">
-    <UTabs
+    <!-- <UTabs
       :items="categorys"
       @change="onChange"
-    />
-    <div>
+    /> -->
+    <div class="b-b-1 b-#eee py-5 flex items-center my-2">
+      <div
+        v-for="tab in categorys"
+        :key="tab.id"
+        class="p-5 cursor-pointer b-1 b-#666 h-10 rounded-5 flex items-center justify-center mr-5"
+        :class="[tab.id === activeTab ? 'text-blue-500 border-blue-500' : 'text-gray-500 border-gray-500']"
+        @click="onChangeTab(tab.id)"
+      >
+        {{ tab.name }}
+      </div>
+    </div>
+    <div class="mt-5">
       <div class="flex flex-wrap">
         <div
           v-for="item in websites"
@@ -52,7 +68,9 @@ onMounted(async () => {
           @click="goLink(item.url)"
         >
           <div class="p-2">
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div
+              class="rounded-lg shadow-md overflow-hidden"
+            >
               <div class="p-4 flex items-center">
                 <img
                   :src="item.logo"
@@ -66,6 +84,9 @@ onMounted(async () => {
                   <p class="text-gray-600">
                     {{ item.description }}
                   </p>
+                  <div class="text-gray-500 mt-2 text-sm">
+                    {{ item.websiteTags?.map(item => item.tags).map(item => item.name).join('、') }}
+                  </div>
                 </div>
               </div>
             </div>

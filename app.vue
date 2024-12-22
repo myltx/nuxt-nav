@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import getUserInfo from './api/user'
 import { getIdTokenClaims, isAuthenticated } from './server/auth'
 import { useUserStore } from './store/user'
 
@@ -22,8 +23,11 @@ const { status } = useAsyncData('initApplication', async () => {
         userId: res?.sub,
       },
     })
+
+    const user = await getUserInfo()
     userStore.initUser({
       ...res,
+      user,
       ...data?.value?.data,
     })
   }
