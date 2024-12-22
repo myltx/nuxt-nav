@@ -1,48 +1,80 @@
 import { verifyJwtToken } from '../../utils/auth'
 import { serverSupabaseClient } from '#supabase/server'
-import { generateRequestErrorData, generateRequestSuccessData } from '~/server/utils'
+import { generateRequestSuccessData, snakeToCamel } from '~/server/utils'
 
 export default eventHandler(async (event) => {
-  // 解析请求体，获取 userId
-  const body = await readBody(event)
-  const { userId } = body
-
-  // 从请求头中获取 Authorization Token
-  const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
-  if (!token) {
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized: No token provided' })
-  }
-
   try {
-    // 解码 JWT Token
-    verifyJwtToken(token)
-    // 初始化 Supabase 客户端
-    const client = await serverSupabaseClient(event)
-    // 使用 Supabase 查询数据库
-    const { data, error } = await client
-      .from('websites') // 替换为你的表名
-      .select('*') // 选择所有字段，或者根据需要选择特定字段
-      // .eq('user_id', userId) // 'user_id' 是你查询的字段名
+    // const body = await readBody(event)
 
-    if (error) {
-      // return generateRequestErrorData(500, 'Supabase query failed')
+    // 从请求头中获取 Authorization Token
+    const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
+    if (!token) {
       throw createError({
-        statusCode: 500,
-        statusMessage: `Supabase query failed: ${error.message}`,
+        statusCode: 401,
+        statusMessage: 'Unauthorized: No token provided',
       })
     }
 
-    // 如果查询到的 data 是数组且有数据，取第一个元素
-    if (data && data.length > 0) {
-      return generateRequestSuccessData(data) // 直接返回第一个用户对象
+    // 解码 JWT Token
+    verifyJwtToken(token)
+
+    // 初始化 Supabase 客户端
+    const client = await serverSupabaseClient(event)
+
+    // 查询数据库
+    const pageSize = 10 // 每页获取 10 个网站
+    const page = 1 // 当前页数，从 1 开始
+    const offset = (page - 1) * pageSize // 计算分页的偏移量
+
+    const { data, error } = await client.from('websites').select(`
+    *,
+    categories!websites_category_id_fkey(name),
+    website_tags(
+      tag_id,
+      tags!website_tags_tag_id_fkey(name)
+    )
+  `)
+      .order('created_at', { ascending: false }) // 按创建时间降序排序
+      .range(offset, offset + pageSize - 1)
+
+    if (error) {
+      console.error('Error fetching websites with categories and tags:', error)
+    }
+    else {
+      console.log('Websites with categories and tags:', data)
     }
 
-    // 如果没有找到数据，返回一个空对象或适当的错误信息
-    return generateRequestSuccessData([]) // 或者抛出 404 错误
+    if (data && data.length > 0) {
+      // 数据处理：提取 tags 信息到外层
+      // const processedData = data.map((website: any) => {
+      //   const tags = website.website_tags?.map((tag: any) => {
+      //     return {
+      //       id: tag.tag_id,
+      //       name: tag.tag?.name,
+      //     }
+      //   }) || []
+      //   return {
+      //     ...website,
+      //     tags, // 将 tags 名称提取到外层
+      //   }
+      // })
+      const result: any = []
+      data.forEach((item: any) => {
+        const obj: any = {}
+        for (const key in item) {
+          const element = item[key]
+          obj[snakeToCamel(key)] = element
+        }
+        result.push(obj)
+      })
+      return generateRequestSuccessData(result)
+    }
+    else {
+      return generateRequestSuccessData([]) // 返回空数组或适当的错误信息
+    }
   }
   catch (err) {
-    // 捕获错误并返回适当的错误消息
-    return generateRequestErrorData(401, 'Invalid or expired token')
+    console.log(err, 'err')
     throw createError({
       statusCode: 401,
       statusMessage: 'Invalid or expired token',

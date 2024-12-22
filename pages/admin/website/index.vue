@@ -15,10 +15,14 @@
         <div>
           <UButton
             color="gray"
+            @click="getList"
           >
             重置
           </UButton>
-          <UButton class="mx-2">
+          <UButton
+            class="mx-2"
+            @click="getList"
+          >
             查询
           </UButton>
           <UButton @click="openEditModalFn">
@@ -32,10 +36,30 @@
       :class="$colorMode.value === 'dark' ? 'bg-black' : 'bg-white'"
     >
       <UTable
-        :rows="people"
+        :rows="tableData"
         :columns="columns"
         :loading="loading"
-      />
+      >
+        <template #categories-data="{ row }">
+          <div>{{ row?.categories?.name }}</div>
+        </template>
+        <template #websiteTags-data="{ row }">
+          <div>{{ row?.websiteTags?.map(item => item.tags).map(item => item.name).join('、') }}</div>
+        </template>
+        <template #action-data="{ row }">
+          <UButton
+            color="gray"
+            variant="ghost"
+            icon="i-heroicons-pencil-20-solid"
+            @click="openEditModalFn"
+          />
+          <UButton
+            color="gray"
+            variant="ghost"
+            icon="i-heroicons-trash-20-solid"
+          />
+        </template>
+      </UTable>
     </div>
     <div
       class="shadow p-2 rounded-2 mt-2"
@@ -52,10 +76,17 @@
       v-model="openEditModal"
       prevent-close
     >
-      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <UCard
+        :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+        }"
+      >
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+            <h3
+              class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+            >
               编辑
             </h3>
             <UButton
@@ -198,29 +229,34 @@ const closeEditModalFn = () => {
 }
 
 const loading = ref(true)
-const people = ref([])
-const columns = ref([{
-  key: 'name',
-  label: '分类名称',
-}, {
-  key: 'description',
-  label: '描述',
-},
-{
-  key: 'created_at',
-  label: '创建时间',
-},
-{
-  key: 'updated_at',
-  label: '更新时间',
-},
-{
-  key: 'action',
-  label: '操作',
-  width: 100,
-  align: 'center',
-},
-
+const tableData = ref([])
+const columns = ref([
+  {
+    key: 'title',
+    label: '分类名称',
+  },
+  {
+    key: 'description',
+    label: '描述',
+  },
+  {
+    key: 'url',
+    label: '地址',
+  },
+  {
+    key: 'categories',
+    label: '分类',
+  },
+  {
+    key: 'websiteTags',
+    label: '标签',
+  },
+  {
+    key: 'action',
+    label: '操作',
+    width: 100,
+    align: 'center',
+  },
 ])
 
 const state = reactive({
@@ -236,10 +272,12 @@ const state = reactive({
 const validate = (state: any): FormError[] => {
   const errors = []
   if (!state.title) errors.push({ path: 'title', message: '请输入站点名称' })
-  if (!state.categoryId) errors.push({ path: 'categoryId', message: '请选择分类' })
+  if (!state.categoryId)
+    errors.push({ path: 'categoryId', message: '请选择分类' })
   if (!state.tags) errors.push({ path: 'tags', message: '请选择标签' })
   if (!state.url) errors.push({ path: 'url', message: '请输入站点地址' })
-  if (!state.description) errors.push({ path: 'description', message: '请输入描述' })
+  if (!state.description)
+    errors.push({ path: 'description', message: '请输入描述' })
   if (!state.image) errors.push({ path: 'image', message: '请上传图片' })
   return errors
 }
@@ -263,9 +301,12 @@ onMounted(() => {
 const getList = async () => {
   loading.value = true
   try {
-    const data = await getWebsites({})
+    const data = await getWebsites({
+      page: page.value,
+      limit: 10,
+    })
     if (data.code === 200) {
-      people.value = data.data
+      tableData.value = data.data
     }
     loading.value = false
   }
@@ -283,6 +324,4 @@ const getSelectData = () => {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
