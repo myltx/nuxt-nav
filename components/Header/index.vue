@@ -15,8 +15,7 @@
     transition-all
     py-3
     px-4
-    md:px-8
-    lg:px-32"
+    "
   >
     <div class="logo flex items-center">
       <img

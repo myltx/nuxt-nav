@@ -1,5 +1,5 @@
 <template>
-  <div class="py-2">
+  <div class="">
     <Header />
     <div class="w-98% mx-auto shadow rounded-2 h-175">
       <slot />
