@@ -105,7 +105,7 @@ const items = [
       label: '后台管理',
       key: 'admin',
       icon: 'i-heroicons-book-open',
-      show: isAuthenticated(),
+      show: isAuthenticated() && localStorage.getItem('role') === 'admin',
     },
   ],
   [{
