@@ -1,6 +1,6 @@
 <template>
-  <div>
-    12
+  <div class="mt-4">
+    <UDivider label="myltx" />
   </div>
 </template>
 

@@ -1,6 +1,29 @@
 <template>
-  <div class="flex items-center justify-between h-16 px-4">
-    <div class="logo">
+  <div
+    class="
+    flex
+    items-center
+    justify-between
+    static
+    top-0
+    h-14
+    shadow-md
+    dark:shadow-white-500
+    50
+    backdrop-blur
+    dark:bg-transparent
+    transition-all
+    py-3
+    px-4
+    md:px-8
+    lg:px-32"
+  >
+    <div class="logo flex items-center">
+      <img
+        src="~/assets/images/logo.gif"
+        class="h-6 w-6 rounded-full mr-2"
+        alt=""
+      >
       myltx-nav
     </div>
     <div class="flex items-center">

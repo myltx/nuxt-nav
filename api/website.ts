@@ -8,6 +8,14 @@ export function getWebsites(data: any) {
   })
 }
 
+export function getWebsitesNoPage(data: any) {
+  const http = getHttp()
+  return http('/api/website/listAll', {
+    method: 'POST',
+    body: data,
+  })
+}
+
 export function addWebsite(data: any) {
   const http = getHttp()
   return http('/api/website/add', {
