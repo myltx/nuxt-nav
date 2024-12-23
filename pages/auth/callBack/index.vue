@@ -29,7 +29,7 @@ const { isLoading } = useHandleSignInCallback(async () => {
       userId: res?.sub,
     },
   })
-  const user = await getUserInfo()
+  const user = await getUserInfo({ userId: res?.sub })
   console.log(user, 'user')
   userStore.initUser({
     ...res,

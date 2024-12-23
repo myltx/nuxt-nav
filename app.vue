@@ -24,7 +24,7 @@ const { status } = useAsyncData('initApplication', async () => {
       },
     })
 
-    const user = await getUserInfo()
+    const user = await getUserInfo({ userId: res?.sub })
     userStore.initUser({
       ...res,
       user,

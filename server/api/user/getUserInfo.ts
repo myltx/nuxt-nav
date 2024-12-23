@@ -3,6 +3,8 @@ import { serverSupabaseClient } from '#supabase/server'
 
 export default eventHandler(async (event) => {
   // 解析请求体，获取 userId
+  const body = await readBody(event)
+  const { userId } = body
 
   // 从请求头中获取 Authorization Token
   const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
@@ -11,14 +13,14 @@ export default eventHandler(async (event) => {
   }
 
   // 解码 JWT Token
-  const decoded = verifyJwtToken(token)
+  // const decoded = verifyJwtToken(token)
   // 初始化 Supabase 客户端
   const client = await serverSupabaseClient(event)
   // 使用 Supabase 查询数据库
   const { data, error } = await client
     .from('users') // 替换为你的表名
     .select('*') // 选择所有字段，或者根据需要选择特定字段
-    .eq('user_id', decoded?.userId) // 'user_id' 是你查询的字段名
+    .eq('user_id', userId) // 'user_id' 是你查询的字段名
 
   if (error) {
     throw createError({
