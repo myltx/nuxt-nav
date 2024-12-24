@@ -44,16 +44,13 @@ onMounted(async () => {
 
 <template>
   <div class="mt-2">
-    <!-- <UTabs
-      :items="categorys"
-      @change="onChange"
-    /> -->
-    <div class="b-b-1 b-#eee py-5 flex items-center my-2">
+    <div class="b-b-1 b-#eee py-5 flex items-center my-2 mx-2">
       <div
         v-for="tab in categorys"
         :key="tab.id"
-        class="p-5 cursor-pointer b-1 b-#666 h-10 rounded-5 flex items-center justify-center mr-5"
-        :class="[tab.id === activeTab ? 'text-blue-500 border-blue-500' : 'text-gray-500 border-gray-500']"
+        class="p-5 cursor-pointer h-10 rounded-5 flex items-center justify-center mr-3 shadow hover:text-blue hover:font-500"
+        :class="[tab.id === activeTab ? 'text-blue-500 border-blue-500 font-500' : 'text-gray-500 border-gray-500',
+                 $colorMode.value === 'dark' ? 'b-1 b-#fff' : '']"
         @click="onChangeTab(tab.id)"
       >
         {{ tab.name }}
@@ -64,29 +61,36 @@ onMounted(async () => {
         <div
           v-for="item in websites"
           :key="item.id"
-          class="w-1/3 cursor-pointer item"
+          class="w-1/5 cursor-pointer item"
           @click="goLink(item.url)"
         >
-          <div class="p-2">
+          <div
+            class="p-2"
+          >
             <div
-              class="rounded-lg shadow-md overflow-hidden"
+              class="rounded-lg shadow overflow-hidden"
+              :class="[$colorMode.value === 'dark' ? 'b-1 b-gray-500' : '']"
             >
-              <div class="p-4 flex items-center">
-                <img
-                  :src="item.logo"
-                  alt=""
-                  class="w-16 h-16 rounded-full mr-4"
-                >
+              <div class="p-4 h-30">
+                <div class="flex items-center">
+                  <img
+                    :src="item.logo"
+                    alt=""
+                    class="w-10 h-10 rounded-full mr-4"
+                  >
+                  <div>
+                    <h2 class="text-4 font-bold mb-1">
+                      {{ item.title }}
+                    </h2>
+                    <div class="text-gray-500 text-3">
+                      {{ item.websiteTags?.map(item => item.tags).map(item => item.name).join('、') }}
+                    </div>
+                  </div>
+                </div>
                 <div>
-                  <h2 class="text-xl font-bold mb-2">
-                    {{ item.title }}
-                  </h2>
-                  <p class="text-gray-600">
+                  <p class="text-slate-500 text-3 mt-2 font-500 tracking-1px overflow-hidden line-clamp-2">
                     {{ item.description }}
                   </p>
-                  <div class="text-gray-500 mt-2 text-sm">
-                    {{ item.websiteTags?.map(item => item.tags).map(item => item.name).join('、') }}
-                  </div>
                 </div>
               </div>
             </div>
