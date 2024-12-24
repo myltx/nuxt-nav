@@ -1,22 +1,9 @@
-import { verifyJwtToken } from '../../utils/auth'
 import { serverSupabaseClient } from '#supabase/server'
 import { generateRequestSuccessData, snakeToCamel } from '~/server/utils'
 
 export default eventHandler(async (event) => {
   try {
     // const body = await readBody(event)
-
-    // 从请求头中获取 Authorization Token
-    const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
-    if (!token) {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized: No token provided',
-      })
-    }
-
-    // 解码 JWT Token
-    verifyJwtToken(token)
 
     // 初始化 Supabase 客户端
     const client = await serverSupabaseClient(event)

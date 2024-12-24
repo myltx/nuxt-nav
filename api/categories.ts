@@ -10,7 +10,7 @@ export function getCategories(data: any) {
 
 export function getNoTokenCategories(data: any) {
   const http = getHttp()
-  return http('/api/categories/noTokenList', {
+  return http('/api/categories/categoriesList', {
     method: 'POST',
     body: data,
   })

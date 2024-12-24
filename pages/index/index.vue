@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getNoTokenCategories } from '~/api/categories'
-import { getTags } from '~/api/tag'
-import { getWebsitesNoPage } from '~/api/website'
+import { getNoTokenTags } from '~/api/tag'
+import { getNoTokenWebsites } from '~/api/website'
 
 const categorys = ref([])
 const tags = ref([])
@@ -26,10 +26,10 @@ const getSelectData = () => {
       activeTab.value = res.data[0].id
     }
   })
-  getTags({}).then((res) => {
+  getNoTokenTags({}).then((res) => {
     tags.value = res.data
   })
-  getWebsitesNoPage({}).then((res) => {
+  getNoTokenWebsites({}).then((res) => {
     websites.value = res.data
   })
 }

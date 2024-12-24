@@ -8,9 +8,9 @@ export function getWebsites(data: any) {
   })
 }
 
-export function getWebsitesNoPage(data: any) {
+export function getNoTokenWebsites(data: any) {
   const http = getHttp()
-  return http('/api/website/listAll', {
+  return http('/api/website/websiteList', {
     method: 'POST',
     body: data,
   })

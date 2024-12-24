@@ -8,6 +8,14 @@ export function getTags(data: any) {
   })
 }
 
+export function getNoTokenTags(data: any) {
+  const http = getHttp()
+  return http('/api/tag/tagList', {
+    method: 'POST',
+    body: data,
+  })
+}
+
 export function addTag(data: any) {
   const http = getHttp()
   return http('/api/tag/add', {

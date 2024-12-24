@@ -6,12 +6,6 @@ export default eventHandler(async (event) => {
   const body = await readBody(event)
   const { userId } = body
 
-  // 从请求头中获取 Authorization Token
-  const token = getHeader(event, 'Authorization')?.replace('Bearer ', '')
-  if (!token) {
-    throw createError({ statusCode: 401, statusMessage: 'Unauthorized: No token provided' })
-  }
-
   try {
     // 初始化 Supabase 客户端
     const client = await serverSupabaseClient(event)
