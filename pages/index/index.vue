@@ -1,41 +1,52 @@
 <script setup lang="ts">
 import { getNoTokenCategories } from '~/api/categories'
-import { getNoTokenTags } from '~/api/tag'
 import { getNoTokenWebsites } from '~/api/website'
 
-const categorys = ref([])
-const tags = ref([])
-const activeTab = ref(0)
-const websites = ref([])
+interface Category {
+  id: number
+  name: string
+}
+interface Website {
+  [key: string]: any
+}
+const categorys = ref<Category[]>([])
+const activeTab = ref(-1)
+const websites = ref<Website[]>([])
 
 const onChangeTab = (id: number) => {
-  console.log(id)
   activeTab.value = id
+  getWebSites()
 }
 
-const getSelectData = () => {
-  getNoTokenCategories({}).then((res) => {
-    categorys.value = res.data.map((item) => {
-      return {
-        ...item,
-        label: item.name,
-        value: item.id,
-      }
-    })
-    if (res.data.length) {
-      activeTab.value = res.data[0].id
+const getSelectData = async () => {
+  const { data: categorysData } = await getNoTokenCategories({})
+  console.log(categorysData, 'categorysData')
+  categorys.value = categorysData.map((item: Category) => {
+    return {
+      ...item,
+      label: item.name,
+      value: item.id,
     }
   })
-  getNoTokenTags({}).then((res) => {
-    tags.value = res.data
+  categorys.value.unshift({
+    id: -1,
+    name: '全部',
   })
-  getNoTokenWebsites({}).then((res) => {
-    websites.value = res.data
-  })
+  if (categorys.value.length) {
+    activeTab.value = categorys.value[0]?.id
+  }
+  getWebSites()
 }
 
 const goLink = (url: string) => {
   window.open(url, '_blank')
+}
+const getWebSites = () => {
+  getNoTokenWebsites({
+    categoryId: activeTab.value,
+  }).then((res) => {
+    websites.value = res.data
+  })
 }
 onMounted(async () => {
   getSelectData()
@@ -49,8 +60,12 @@ onMounted(async () => {
         v-for="tab in categorys"
         :key="tab.id"
         class="p-5 cursor-pointer h-10 rounded-5 flex items-center justify-center mr-3 shadow hover:text-blue hover:font-500"
-        :class="[tab.id === activeTab ? 'text-blue-500 border-blue-500 font-500' : 'text-gray-500 border-gray-500',
-                 $colorMode.value === 'dark' ? 'b-1 b-#fff' : '']"
+        :class="[
+          tab.id == activeTab
+            ? 'text-blue-500 border-blue-500 font-500'
+            : 'text-gray-500 border-gray-500',
+          $colorMode.value === 'dark' ? 'b-1 b-#fff' : '',
+        ]"
         @click="onChangeTab(tab.id)"
       >
         {{ tab.name }}
@@ -64,9 +79,7 @@ onMounted(async () => {
           class="w-1/5 cursor-pointer item"
           @click="goLink(item.url)"
         >
-          <div
-            class="p-2"
-          >
+          <div class="p-2">
             <div
               class="rounded-lg shadow overflow-hidden"
               :class="[$colorMode.value === 'dark' ? 'b-1 b-gray-500' : '']"
@@ -83,12 +96,19 @@ onMounted(async () => {
                       {{ item.title }}
                     </h2>
                     <div class="text-gray-500 text-3">
-                      {{ item.websiteTags?.map(item => item.tags).map(item => item.name).join('、') }}
+                      {{
+                        item.websiteTags
+                          ?.map((item: any) => item.tags)
+                          .map((item: any) => item.name)
+                          .join("、")
+                      }}
                     </div>
                   </div>
                 </div>
                 <div>
-                  <p class="text-slate-500 text-3 mt-2 font-500 tracking-1px overflow-hidden line-clamp-2">
+                  <p
+                    class="text-slate-500 text-3 mt-2 font-500 tracking-1px overflow-hidden line-clamp-2"
+                  >
                     {{ item.description }}
                   </p>
                 </div>
@@ -104,7 +124,7 @@ onMounted(async () => {
 <style scoped>
 body {
   background-color: #fff;
-  color: rgba(0,0,0,0.8);
+  color: rgba(0, 0, 0, 0.8);
 }
 .dark-mode body {
   background-color: #091a28;
