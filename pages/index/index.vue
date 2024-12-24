@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCategories } from '~/api/categories'
+import { getNoTokenCategories } from '~/api/categories'
 import { getTags } from '~/api/tag'
 import { getWebsitesNoPage } from '~/api/website'
 
@@ -14,7 +14,7 @@ const onChangeTab = (id: number) => {
 }
 
 const getSelectData = () => {
-  getCategories({}).then((res) => {
+  getNoTokenCategories({}).then((res) => {
     categorys.value = res.data.map((item) => {
       return {
         ...item,

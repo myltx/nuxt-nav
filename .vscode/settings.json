@@ -3,5 +3,6 @@
 		"source.fixAll": "never",
 		"source.fixAll.eslint": "explicit"
 	},
-	"eslint.experimental.useFlatConfig": true
+	"eslint.experimental.useFlatConfig": true,
+	"Codegeex.RepoIndex": true
 }
