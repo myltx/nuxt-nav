@@ -1,0 +1,4 @@
+{
+  "buildCommand": "nuxt build",
+  "devCommand": "nuxt dev"
+}
