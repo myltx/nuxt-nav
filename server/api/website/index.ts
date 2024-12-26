@@ -2,7 +2,7 @@ import { verifyJwtToken } from '../../utils/auth'
 import { serverSupabaseClient } from '#supabase/server'
 import { generateRequestSuccessData, snakeToCamel } from '~/server/utils'
 
-export default eventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   try {
     // const body = await readBody(event)
 

@@ -1,7 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import { generateRequestErrorData, generateRequestSuccessData } from '~/server/utils'
 
-export default eventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   // 解析请求体，获取 userId
   const body = await readBody(event)
   const { userId } = body
