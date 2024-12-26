@@ -72,11 +72,14 @@ onMounted(async () => {
       </div>
     </div>
     <div class="mt-5">
-      <div class="flex flex-wrap">
+      <div
+        class="grid gap-5 w-full justify-center"
+        style="grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));"
+      >
         <div
           v-for="item in websites"
           :key="item.id"
-          class="w-1/5 cursor-pointer item"
+          class="cursor-pointer item"
           @click="goLink(item.url)"
         >
           <div class="p-2">
